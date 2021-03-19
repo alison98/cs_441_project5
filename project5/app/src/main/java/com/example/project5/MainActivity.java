@@ -31,16 +31,21 @@ public class MainActivity extends AppCompatActivity {
     public int sensorValToInt(float val, float range){
         int ret = 127;
         ret += (int)(val / range * 127);
+        if(ret < 0)
+            return 0;
+        else if(ret > 255)
+            return 255;
         return ret;
     }
 
     SensorEventListener sensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            float range = sensor.getMaximumRange();
-            //System.out.println(sensor.getMaximumRange());
-            //System.out.println(Arrays.toString(sensorEvent.values));
-            getWindow().getDecorView().setBackgroundColor(Color.rgb(sensorValToInt(sensorEvent.values[0], 9.81f),sensorValToInt(sensorEvent.values[1], 9.81f), sensorValToInt(sensorEvent.values[2], 9.81f)));
+            float range = 9.81f;
+            int r = sensorValToInt(sensorEvent.values[0], range);
+            int g = sensorValToInt(sensorEvent.values[1], range);
+            int b = sensorValToInt(sensorEvent.values[2], range);
+            getWindow().getDecorView().setBackgroundColor(Color.rgb(r, g, b));
         }
 
         @Override
